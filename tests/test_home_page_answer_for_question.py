@@ -3,7 +3,6 @@ import pytest
 
 from selenium import webdriver
 from pages.home_page import HomePage
-from pages.base_page import BasePage
 
 
 class TestHomePage:
@@ -41,14 +40,14 @@ class TestHomePage:
     @allure.description('Проверка соответствия открывающегося текста ответа на вопрос из списка')
     @pytest.mark.parametrize('question_button, panel, text_in_panel', question_answer)
     def test_click_on_button_text_answer_panel(self, question_button, panel, text_in_panel):
-        self.driver.get(BasePage.url_home_page)
         home_page = HomePage(self.driver)
-        home_page.click_on_button(HomePage.button_cookie)
+        home_page.open_home_page()
+        home_page.click_on_button_cookie()
         home_page.scroll_to_questions()
         home_page.click_question_button(question_button)
         text_answer = home_page.get_text_answer(panel)
+        home_page.delete_cookie()
         assert text_answer == text_in_panel
-        self.driver.delete_all_cookies()
 
     @classmethod
     def teardown_class(cls):

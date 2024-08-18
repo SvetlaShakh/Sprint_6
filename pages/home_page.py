@@ -1,6 +1,5 @@
+import allure
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
 from pages.base_page import BasePage
 
 
@@ -35,16 +34,33 @@ class HomePage(BasePage):
     answer_panel_beyond_mkad = [By.XPATH, ".//div[contains(text(), 'за МКАДом')]/../../"
                                           "div[@class='accordion__panel']/p"]
 
+    @allure.step('Прокрутить страницу до блока с вопросами')
     def scroll_to_questions(self):
-        element = self.driver.find_element(*self.title_questions)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
+        element_of_page = self.title_questions
+        self.scroll_to_element_of_page(element_of_page)
 
+    @allure.step('Принять куки')
+    def click_on_button_cookie(self):
+        self.click_on_button(self.button_cookie)
+
+    @allure.step('Кликнуть по кнопке "Заказать"')
+    def click_on_order_button(self, button):
+        self.click_on_button(button)
+
+    @allure.step('Кликнуть по полю с вопросом')
     def click_question_button(self, question_button):
-        WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(question_button))
+        self.wait_for_visibility_of_element(question_button)
         self.click_on_button(question_button)
 
+    @allure.step('Получить текст панели ответа')
     def get_text_answer(self, panel):
-        WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(panel))
-        return self.driver.find_element(*panel).text
+        self.wait_for_visibility_of_element(panel)
+        return self.get_text_of_element(panel)
+
+    @allure.step('Кликнуть по лого "Самокат"')
+    def click_on_logo_scooter(self):
+        self.click_on_button(BasePage.logo_scooter)
+
+    @allure.step('Кликнуть по лого "Яндекс"')
+    def click_on_logo_yandex(self):
+        self.click_on_button(BasePage.logo_yandex)
