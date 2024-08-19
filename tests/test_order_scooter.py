@@ -58,8 +58,9 @@ class TestOrderScooter:
         home_page.delete_cookie()
         home_page.switch_next_window()
         home_page.wait_for_url(BasePage.url_dzen_main)
-        assert home_page.get_url() == BasePage.url_dzen_main
+        redirect_url = home_page.get_url()
         home_page.switch_previous_window()
+        assert redirect_url == BasePage.url_dzen_main
 
     @classmethod
     def teardown_class(cls):
